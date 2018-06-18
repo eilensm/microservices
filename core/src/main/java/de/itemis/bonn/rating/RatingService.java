@@ -1,5 +1,6 @@
 package de.itemis.bonn.rating;
 
+import de.itemis.bonn.rating.spi.LoggingService;
 import de.itemis.bonn.rating.spi.RatingPersistenceService;
 
 import java.util.List;
@@ -7,12 +8,15 @@ import java.util.List;
 public class RatingService {
 
   private final RatingPersistenceService ratingPersistenceService;
+  private final LoggingService loggingService;
 
-  public RatingService(final RatingPersistenceService ratingPersistenceService) {
+  public RatingService(final RatingPersistenceService ratingPersistenceService, LoggingService loggingService) {
     this.ratingPersistenceService = ratingPersistenceService;
+    this.loggingService = loggingService;
   }
 
   public Rating createRating(final int value) {
+    loggingService.logEvent("creating a rating object with value " + value);
     final Rating rating = new Rating();
     rating.setValue(value);
     return ratingPersistenceService.storeRating(rating);

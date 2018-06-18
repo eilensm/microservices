@@ -1,5 +1,6 @@
 package de.itemis.bonn.rating;
 
+import de.itemis.bonn.rating.spi.LoggingService;
 import de.itemis.bonn.rating.spi.RatingPersistenceService;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +28,9 @@ public class RatingServiceTest {
   @Mock
   private RatingPersistenceService ratingPersistenceService;
 
+  @Mock
+  private LoggingService loggingService;
+
   @InjectMocks
   private RatingService ratingService;
 
@@ -42,6 +46,12 @@ public class RatingServiceTest {
     when(ratingPersistenceService.findRatingById(RATING_ID)).thenReturn(buildRating(RATING_ID, RATING_VALUE));
     when(ratingPersistenceService.findAllRatings()).thenReturn(
         asList(buildRating(RATING_ID, RATING_VALUE), buildRating(RATING2_ID, RATING2_VALUE)));
+  }
+
+  @Test
+  public void createRatingShouldLog() {
+    ratingService.createRating(RATING_VALUE);
+    verify(loggingService).logEvent("creating a rating object with value " + RATING_VALUE);
   }
 
   @Test

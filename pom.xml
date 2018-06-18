@@ -10,6 +10,7 @@
         <module>core</module>
         <module>spring-boot-app</module>
         <module>rating-persistence-mongoadapter</module>
+        <module>rating-logging-mongoadapter</module>
     </modules>
     <packaging>pom</packaging>
 
