@@ -53,9 +53,8 @@ public class RatingServiceTest {
   @Test
   public void createRatingShouldReturnPersistedRating() {
     final Rating createdRating = ratingService.createRating(RATING_VALUE);
-    final ArgumentCaptor<Rating> captor = ArgumentCaptor.forClass(Rating.class);
     assertThat(createdRating.getId()).isNotNull();
-    assertThat(captor.getValue().getValue()).isEqualTo(RATING_VALUE);
+    assertThat(createdRating.getValue()).isEqualTo(RATING_VALUE);
   }
 
   @Test
@@ -105,7 +104,7 @@ public class RatingServiceTest {
 
   @Test
   public void getRatingsShouldQueryPersistence() {
-    final List<Rating> ratings = ratingService.getRatings();
+    ratingService.getRatings();
     verify(ratingPersistenceService).findAllRatings();
   }
 

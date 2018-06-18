@@ -43,5 +43,4 @@ public class RatingResource {
   List<Rating> getRatings() {
     return ratingService.getRatings();
   }
-
 }
