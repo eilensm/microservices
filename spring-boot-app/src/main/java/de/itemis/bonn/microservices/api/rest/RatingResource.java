@@ -2,6 +2,8 @@ package de.itemis.bonn.microservices.api.rest;
 
 import de.itemis.bonn.rating.Rating;
 import de.itemis.bonn.rating.RatingService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +22,9 @@ public class RatingResource {
   }
 
   @RequestMapping(method = POST)
-  public Rating createRating(@RequestBody final Integer value) {
-    return ratingService.createRating(value);
+  @ResponseBody
+  public ResponseEntity<Rating> createRating(@RequestBody final Integer value) {
+    return new ResponseEntity<>(ratingService.createRating(value), HttpStatus.CREATED);
   }
 
   @RequestMapping(path = "/{id}", method = PUT)
