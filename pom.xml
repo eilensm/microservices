@@ -12,6 +12,7 @@
         <module>rating-persistence-mongoadapter</module>
         <module>rating-logging-mongoadapter</module>
         <module>acceptance-tests</module>
+        <module>jgiven-acceptance-tests</module>
     </modules>
     <packaging>pom</packaging>
 
