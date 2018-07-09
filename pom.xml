@@ -13,6 +13,7 @@
         <module>rating-logging-mongoadapter</module>
         <module>acceptance-tests</module>
         <module>jgiven-acceptance-tests</module>
+        <module>junit-acceptance-tests</module>
     </modules>
     <packaging>pom</packaging>
 

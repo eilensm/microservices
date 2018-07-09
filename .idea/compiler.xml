@@ -9,6 +9,7 @@
         <module name="acceptance-tests" />
         <module name="core" />
         <module name="jgiven-acceptance-tests" />
+        <module name="junit-acceptance-tests" />
         <module name="rating-logging-mongoadapter" />
         <module name="rating-persistence-mongoadapter" />
         <module name="spring-boot-app" />
