@@ -7,7 +7,7 @@
     <file url="file://$PROJECT_DIR$/jgiven-acceptance-tests" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/junit-acceptance-tests" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rating-logging-mongoadapter" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rating-persistence-mongo-adapter" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rating-persistence-mongoadapter" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-boot-app" charset="UTF-8" />
   </component>
 </project>
