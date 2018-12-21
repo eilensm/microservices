@@ -159,6 +159,7 @@
                 <artifactId>pitest-maven</artifactId>
                 <configuration>
                     <outputFormats>
+                        <formats>HTML</formats>
                         <format>XML</format>
                     </outputFormats>
                 </configuration>
