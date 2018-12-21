@@ -13,7 +13,7 @@ pipeline {
         stage('PIT Mutation Tests') {
             steps {
                 withMaven(maven: 'M3') {
-                    sh 'mvn org.pitest:pitest-maven:mutationCoverage'
+                    sh 'mvn clean package org.pitest:pitest-maven:mutationCoverage'
                 }
                 step([
                     $class: 'PitPublisher',
