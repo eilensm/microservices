@@ -15,6 +15,12 @@ pipeline {
                 withMaven(maven: 'M3') {
                     sh 'mvn org.pitest:pitest-maven:mutationCoverage'
                 }
+                step([
+                    $class: 'PitPublisher',
+                    mutationStatsFile: '**/mutations.xml',
+                    minimumKillRatio: 00.00,
+                    killRatioMustImprove: false
+                ])
             }
         }
     }
