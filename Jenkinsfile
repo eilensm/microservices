@@ -9,14 +9,12 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
+
+        stage('PIT Mutation Tests') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                withMaven(maven: 'M3') {
+                    sh 'mvn org.pitest:pitest-maven:mutationCoverage'
+                }
             }
         }
     }
