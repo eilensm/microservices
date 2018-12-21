@@ -154,6 +154,15 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <configuration>
+                    <outputFormats>
+                        <format>XML</format>
+                    </outputFormats>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
