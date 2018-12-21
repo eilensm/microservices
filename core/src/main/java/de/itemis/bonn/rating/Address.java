@@ -7,10 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Rating {
+@NoArgsConstructor
 
-  private String id;
-  private int value;
+public class Address {
+
+  private String street;
+
+  private String houseNo;
+
+  private String postalCode;
 }

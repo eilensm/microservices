@@ -38,7 +38,7 @@ public class RatingServiceTest {
   public void setUp() {
     when(ratingPersistenceService.storeRating(any(Rating.class))).then(invocation -> {
       final Rating input = invocation.getArgument(0);
-      final Rating answer = new Rating();
+      final Rating answer = Rating.builder().build();
       answer.setId(input.getId() != null ? input.getId() : RATING_ID);
       answer.setValue(input.getValue());
       return answer;
@@ -129,9 +129,10 @@ public class RatingServiceTest {
   }
 
   private static Rating buildRating(final String id, final int value) {
-    final Rating persistedRating = new Rating();
-    persistedRating.setValue(value);
-    persistedRating.setId(id);
+    final Rating persistedRating = Rating.builder()
+        .id(id)
+        .value(value)
+        .build();
     return persistedRating;
   }
 }

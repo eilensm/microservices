@@ -10,15 +10,14 @@ public class RatingService {
   private final RatingPersistenceService ratingPersistenceService;
   private final LoggingService loggingService;
 
-  public RatingService(final RatingPersistenceService ratingPersistenceService, LoggingService loggingService) {
+  public RatingService(final RatingPersistenceService ratingPersistenceService, final LoggingService loggingService) {
     this.ratingPersistenceService = ratingPersistenceService;
     this.loggingService = loggingService;
   }
 
   public Rating createRating(final int value) {
     loggingService.logEvent("creating a rating object with value " + value);
-    final Rating rating = new Rating();
-    rating.setValue(value);
+    final Rating rating = Rating.builder().value(value).build();
     return ratingPersistenceService.storeRating(rating);
   }
 

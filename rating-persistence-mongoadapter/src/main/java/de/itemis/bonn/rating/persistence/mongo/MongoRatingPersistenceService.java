@@ -1,6 +1,7 @@
 package de.itemis.bonn.rating.persistence.mongo;
 
 import de.itemis.bonn.rating.Rating;
+import de.itemis.bonn.rating.persistence.mongo.model.RatingEntity;
 import de.itemis.bonn.rating.spi.RatingPersistenceService;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class MongoRatingPersistenceService implements RatingPersistenceService {
 
   @Override
   public Rating storeRating(final Rating rating) {
-    final RatingEntity entity = new RatingEntity(rating);
+    final RatingEntity entity = RatingEntityMapper.INSTANCE.modelToEntity(rating);
     return mapEntityToModel(ratingRepository.save(entity));
   }
 
@@ -34,9 +35,11 @@ public class MongoRatingPersistenceService implements RatingPersistenceService {
   }
 
   private static Rating mapEntityToModel(final RatingEntity entity) {
-    final Rating rating = new Rating();
-    rating.setId(entity.getId());
-    rating.setValue(entity.getValue());
+//    final Rating rating = new Rating();
+//    rating.setId(entity.getId());
+//    rating.setValue(entity.getValue());
+//    return rating;
+    final Rating rating = RatingEntityMapper.INSTANCE.fromEntityToModel(entity);
     return rating;
   }
 }
