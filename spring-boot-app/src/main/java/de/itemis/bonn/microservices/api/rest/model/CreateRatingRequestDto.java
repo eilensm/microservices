@@ -1,19 +1,14 @@
-package de.itemis.bonn.rating;
+package de.itemis.bonn.microservices.api.rest.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
-public class Rating {
-
-  private String id;
+public class CreateRatingRequestDto {
   private String customerName;
   private BigDecimal ratingPd;
   private String ratingClass;

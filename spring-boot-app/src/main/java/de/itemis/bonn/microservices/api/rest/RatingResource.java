@@ -1,5 +1,6 @@
 package de.itemis.bonn.microservices.api.rest;
 
+import de.itemis.bonn.microservices.api.rest.model.CreateRatingRequestDto;
 import de.itemis.bonn.rating.Rating;
 import de.itemis.bonn.rating.RatingService;
 import org.springframework.http.HttpStatus;
@@ -7,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping(path = "/ratings")
@@ -23,16 +24,12 @@ public class RatingResource {
 
   @RequestMapping(method = POST)
   @ResponseBody
-  public ResponseEntity<Rating> createRating(@RequestBody final Integer value) {
-    return new ResponseEntity<>(ratingService.createRating(value), HttpStatus.CREATED);
-  }
-
-  @RequestMapping(path = "/{id}", method = PUT)
-  public Rating createRating(@PathVariable final String id, @RequestBody final Rating rating) {
-    if (!Objects.equals(id, rating.getId())) {
-      throw new RuntimeException(id + " != " + rating.getId());
-    }
-    return ratingService.rate(rating);
+  public ResponseEntity<Rating> createRating(@RequestBody final CreateRatingRequestDto createRatingRequestDto) {
+    final Rating rating = ratingService.createRating(
+        createRatingRequestDto.getCustomerName(),
+        createRatingRequestDto.getRatingPd(),
+        createRatingRequestDto.getRatingClass());
+    return new ResponseEntity<>(rating, HttpStatus.CREATED);
   }
 
   @RequestMapping(path = "/{id}", method = GET)

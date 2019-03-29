@@ -3,6 +3,7 @@ package de.itemis.bonn.rating;
 import de.itemis.bonn.rating.spi.LoggingService;
 import de.itemis.bonn.rating.spi.RatingPersistenceService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class RatingService {
@@ -15,19 +16,15 @@ public class RatingService {
     this.loggingService = loggingService;
   }
 
-  public Rating createRating(final int value) {
-    loggingService.logEvent("creating a rating object with value " + value);
-    final Rating rating = Rating.builder().value(value).build();
+  public Rating createRating(final String customerName, final BigDecimal ratingPd, final String ratingClass) {
+    loggingService.logEvent(String.format("creating a rating object for customer %s with values (%s/%s)", customerName,
+        ratingPd != null ? ratingPd.toString() : null, ratingClass));
+    final Rating rating = Rating.builder()
+        .customerName(customerName)
+        .ratingPd(ratingPd)
+        .ratingClass(ratingClass)
+        .build();
     return ratingPersistenceService.storeRating(rating);
-  }
-
-  public Rating rate(final Rating rating) {
-    final Rating storedRating = ratingPersistenceService.findRatingById(rating.getId());
-    if (storedRating == null) {
-      throw new RatingException("rating not found");
-    }
-    storedRating.setValue(rating.getValue());
-    return ratingPersistenceService.storeRating(storedRating);
   }
 
   public Rating getRating(final String ratingId) {

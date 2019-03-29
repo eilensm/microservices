@@ -10,20 +10,27 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RatingServiceTest {
 
-  private static final int RATING_VALUE = 4711;
   private static final String RATING_ID = "89xosdfjew0";
-  private static final int RATING2_VALUE = 4545;
+  private static final String CUSTOMER_NAME = "Meier";
+  private static final BigDecimal RATING_PD = BigDecimal.valueOf(33.66);
+  private static final String RATING_CLASS = "1a";
+
   private static final String RATING2_ID = "Bxj8908de";
+  private static final String CUSTOMER_NAME2 = "Meier";
+  private static final BigDecimal RATING_PD2 = BigDecimal.valueOf(47.11);
+  private static final String RATING_CLASS2 = "2b";
 
   @Mock
   private RatingPersistenceService ratingPersistenceService;
@@ -40,56 +47,38 @@ public class RatingServiceTest {
       final Rating input = invocation.getArgument(0);
       final Rating answer = Rating.builder().build();
       answer.setId(input.getId() != null ? input.getId() : RATING_ID);
-      answer.setValue(input.getValue());
+      answer.setCustomerName(input.getCustomerName());
+      answer.setRatingClass(input.getRatingClass());
+      answer.setRatingPd(input.getRatingPd());
       return answer;
     });
-    when(ratingPersistenceService.findRatingById(RATING_ID)).thenReturn(buildRating(RATING_ID, RATING_VALUE));
+    final Rating rating1 = buildRating(RATING_ID, CUSTOMER_NAME, RATING_PD, RATING_CLASS);
+    final Rating rating2 = buildRating(RATING2_ID, CUSTOMER_NAME2, RATING_PD2, RATING_CLASS2);
+    when(ratingPersistenceService.findRatingById(RATING_ID)).thenReturn(rating1);
     when(ratingPersistenceService.findAllRatings()).thenReturn(
-        asList(buildRating(RATING_ID, RATING_VALUE), buildRating(RATING2_ID, RATING2_VALUE)));
+        asList(rating1, rating2));
   }
 
   @Test
   public void createRatingShouldLog() {
-    ratingService.createRating(RATING_VALUE);
-    verify(loggingService).logEvent("creating a rating object with value " + RATING_VALUE);
+    ratingService.createRating(CUSTOMER_NAME, RATING_PD, RATING_CLASS);
+    verify(loggingService).logEvent("creating a rating object for customer Meier with values (33.66/1a)");
+  }
+
+  @Test
+  public void createRatingWithNullPdShouldLogNullForPd() {
+    ratingService.createRating(CUSTOMER_NAME, null, RATING_CLASS);
+    verify(loggingService).logEvent("creating a rating object for customer Meier with values (null/1a)");
   }
 
   @Test
   public void createRatingShouldStoreRating() {
-    ratingService.createRating(RATING_VALUE);
-    verify(ratingPersistenceService).storeRating(any(Rating.class));
-  }
-
-  @Test
-  public void createRatingShouldReturnPersistedRating() {
-    final Rating createdRating = ratingService.createRating(RATING_VALUE);
-    assertThat(createdRating.getId()).isNotNull();
-    assertThat(createdRating.getValue()).isEqualTo(RATING_VALUE);
-  }
-
-  @Test
-  public void rateShouldThrowIfRatingDoesNotExist() {
-    assertThatThrownBy(() -> ratingService.rate(mock(Rating.class)))
-        .isInstanceOf(RuntimeException.class)
-        .hasMessage("rating not found");
-  }
-
-  @Test
-  public void rateShouldPersistNewValue() {
-    final int newValue = 666;
-    final Rating ratingToUpdate = buildRating(RATING_ID, newValue);
-    ratingService.rate(ratingToUpdate);
+    ratingService.createRating(CUSTOMER_NAME, RATING_PD, RATING_CLASS);
     final ArgumentCaptor<Rating> captor = ArgumentCaptor.forClass(Rating.class);
     verify(ratingPersistenceService).storeRating(captor.capture());
-    assertThat(captor.getValue().getValue()).isEqualTo(newValue);
-  }
-
-  @Test
-  public void rateShouldReturnUpdatedRating() {
-    final int newValue = 666;
-    final Rating ratingToUpdate = buildRating(RATING_ID, newValue);
-    final Rating updatedRating = ratingService.rate(ratingToUpdate);
-    assertThat(updatedRating.getValue()).isEqualTo(newValue);
+    assertThat(captor.getValue())
+        .extracting(Rating::getCustomerName, Rating::getRatingPd, Rating::getRatingClass)
+        .contains(CUSTOMER_NAME, RATING_PD, RATING_CLASS);
   }
 
   @Test
@@ -102,8 +91,7 @@ public class RatingServiceTest {
   public void getRatingShouldReturnTheRating() {
     final Rating rating = ratingService.getRating(RATING_ID);
     assertThat(rating).isNotNull();
-    assertThat(rating.getId()).isEqualTo(RATING_ID);
-    assertThat(rating.getValue()).isEqualTo(RATING_VALUE);
+    assertThat(rating).isEqualTo(buildRating(RATING_ID, CUSTOMER_NAME, RATING_PD, RATING_CLASS));
   }
 
   @Test
@@ -121,18 +109,16 @@ public class RatingServiceTest {
   @Test
   public void getRatingsShouldReturnAllExistingRatings() {
     final List<Rating> ratings = ratingService.getRatings();
-    assertThat(ratings)
-        .extracting(Rating::getId, Rating::getValue)
-        .containsExactly(
-            tuple(RATING_ID, RATING_VALUE),
-            tuple(RATING2_ID, RATING2_VALUE));
+    assertThat(ratings).hasSize(2);
   }
 
-  private static Rating buildRating(final String id, final int value) {
-    final Rating persistedRating = Rating.builder()
+  private static Rating buildRating(final String id, final String customerName, final BigDecimal ratingPd,
+                                    final String ratingClass) {
+    return Rating.builder()
         .id(id)
-        .value(value)
+        .customerName(customerName)
+        .ratingPd(ratingPd)
+        .ratingClass(ratingClass)
         .build();
-    return persistedRating;
   }
 }
