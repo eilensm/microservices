@@ -37,19 +37,21 @@
             <groupId>de.itemis.bonn</groupId>
             <artifactId>core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>de.itemis.bonn</groupId>
             <artifactId>rating-persistence-mongo-adapter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>de.itemis.bonn</groupId>
             <artifactId>rating-logging-mongoadapter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.itemis.bonn</groupId>
+            <artifactId>logback-logging-adapter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- test dependencies -->

@@ -27,6 +27,11 @@ public class AppConfig {
     return new MongoLoggingService(mongoMessageRepository);
   }
 
+//  @Bean
+//  public LoggingService logbackLoggingService() {
+//    return new LogbackLoggingService();
+//  }
+
   @Bean
   public RatingService ratingService(
       final RatingPersistenceService ratingPersistenceService, final LoggingService loggingService) {
